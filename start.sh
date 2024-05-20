@@ -172,6 +172,10 @@ elif [[ $CpuArch =~ "armv7" ]]; then
 	nohup $Server_Dir/bin/clash-linux-armv7 -d $Conf_Dir &> $Log_Dir/clash.log &
 	ReturnStatus=$?
 	if_success $Text5 $Text6 $ReturnStatus
+elif [[ $CpuArch =~ "loongarch64" ]]; then
+	nohup $Server_Dir/bin/clash-linux-loong64 -d $Conf_Dir &> $Log_Dir/clash.log &
+	ReturnStatus=$?
+	if_success $Text5 $Text6 $ReturnStatus
 else
 	echo -e "\033[31m\n[ERROR] Unsupported CPU Architecture！\033[0m"
 	exit 1

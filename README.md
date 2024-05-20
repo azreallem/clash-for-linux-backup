@@ -37,28 +37,30 @@ clash for linux 备份(备份号：202311091510)。
 下载项目
 
 ```bash
-$ git clone https://github.com/Elegycloud/clash-for-linux-backup.git
+$ git clone https://github.com/azreallem/clash-for-linux-backup.git
 ```
 
 进入到项目目录，编辑`.env`文件，修改变量`CLASH_URL`的值。
 
 ```bash
-$ cd clash-for-linux
+$ cd clash-for-linux-backup
 $ vim .env
 ```
 
+> **注意：** 在订阅链接末尾添加 &unset 再更新订阅。
+>
 > **注意：** `.env` 文件中的变量 `CLASH_SECRET` 为自定义 Clash Secret，值为空时，脚本将自动生成随机字符串。
 
 <br>
 
 ## 启动程序
 
-直接运行脚本文件`start.sh`
+直接运行脚本文件`sudo bash start.sh`
 
 - 进入项目目录
 
 ```bash
-$ cd clash-for-linux
+$ cd clash-for-linux-backup
 ```
 
 - 运行启动脚本
@@ -127,7 +129,7 @@ https_proxy=http://127.0.0.1:7890
 - 进入项目目录
 
 ```bash
-$ cd clash-for-linux
+$ cd clash-for-linux-backup
 ```
 
 - 关闭服务
@@ -190,3 +192,4 @@ $ proxy_off
    目前此项目已集成自动识别和转换clash配置文件的功能。如果依然无法使用，则需要通过自建或者第三方平台（不推荐，有泄露风险）对订阅地址转换。
    
 3. 程序日志中出现`error: unsupported rule type RULE-SET`报错，解决方法查看官方[WIKI](https://github.com/Dreamacro/clash/wiki/FAQ#error-unsupported-rule-type-rule-set)
+  > 在订阅链接末尾添加 &unset 再更新订阅
