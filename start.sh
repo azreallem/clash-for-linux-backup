@@ -18,6 +18,7 @@ chmod +x $Server_Dir/tools/subconverter/subconverter
 
 
 
+
 #################### 变量设置 ####################
 
 Conf_Dir="$Server_Dir/conf"
@@ -32,17 +33,18 @@ Secret=${CLASH_SECRET:-$(openssl rand -hex 32)}
 
 
 
+
 #################### 函数定义 ####################
 
 # 自定义action函数，实现通用action功能
 success() {
-	echo -en "\\033[60G[\\033[1;32m  OK  \\033[0;39m]\r"
+	echo -en "\033[60G[\033[1;32m  OK  \033[0;39m]\r"
 	return 0
 }
 
 failure() {
 	local rc=$?
-	echo -en "\\033[60G[\\033[1;31mFAILED\\033[0;39m]\r"
+	echo -en "\033[60G[\033[1;31mFAILED\033[0;39m]\r"
 	[ -x /bin/plymouth ] && /bin/plymouth --details
 	return $rc
 }
@@ -53,7 +55,7 @@ action() {
 	STRING=$1
 	echo -n "$STRING "
 	shift
-	"$@" && success $"$STRING" || failure $"$STRING"
+	"$@" && success "$STRING" || failure "$STRING"
 	rc=$?
 	echo
 	return $rc
@@ -69,6 +71,7 @@ if_success() {
 		exit 1
 	fi
 }
+
 
 
 
@@ -100,7 +103,7 @@ echo -e '\n正在检测订阅地址...'
 Text1="Clash订阅地址可访问！"
 Text2="Clash订阅地址不可访问！"
 #curl -o /dev/null -s -m 10 --connect-timeout 10 -w %{http_code} $URL | grep '[23][0-9][0-9]' &>/dev/null
-curl -o /dev/null -L -k -sS --retry 5 -m 10 --connect-timeout 10 -w "%{http_code}" $URL | grep -E '^[23][0-9]{2}$' &>/dev/null
+curl -o /dev/null -L -k -sS --retry 5 -m 10 --connect-timeout 10 -w "% {http_code}" $URL | grep -E '^[23][0-9]{2}$' &>/dev/null
 ReturnStatus=$?
 if_success $Text1 $Text2 $ReturnStatus
 
@@ -172,6 +175,10 @@ elif [[ $CpuArch =~ "armv7" ]]; then
 	nohup $Server_Dir/bin/clash-linux-armv7 -d $Conf_Dir &> $Log_Dir/clash.log &
 	ReturnStatus=$?
 	if_success $Text5 $Text6 $ReturnStatus
+elif [[ $CpuArch =~ "loongarch64" ]]; then
+	nohup $Server_Dir/bin/clash-linux-loong64 -d $Conf_Dir &> $Log_Dir/clash.log &
+	ReturnStatus=$?
+	if_success $Text5 $Text6 $ReturnStatus
 else
 	echo -e "\033[31m\n[ERROR] Unsupported CPU Architecture！\033[0m"
 	exit 1
@@ -207,26 +214,7 @@ proxy_off(){
 	echo -e "\033[31m[×] 已关闭代理\033[0m"
 }
 EOF
-echo -e "     く__,.ヘヽ.        /  ,ー､ 〉"
-echo -e "           ＼ ', !-─‐-i  /  /´"
-echo -e "          ／｀ｰ'       L/／｀ヽ､"
-echo -e "         /   ／,   /|   ,   ,       ',"
-echo -e "        ｲ   / /-‐/  ｉ  L_ ﾊ ヽ!   i"
-echo -e "        ﾚ ﾍ 7ｲ｀ﾄ   ﾚ'ｧ-ﾄ､!ハ|   |"
-echo -e "          !,/7 '0'     ´0iソ|    |"
-echo -e "          |.从     _     ,,,, / |./    |"
-echo -e "          ﾚ'| i＞.､,,__  _,.イ /   .i   |"
-echo -e "           ﾚ'| | / k_７_/ﾚ'ヽ,  ﾊ.  |"
-echo -e "             | |/i 〈|/   i  ,.ﾍ |  i  |"
-echo -e "            .|/ /  ｉ：    ﾍ!    ＼  |"
-echo -e "             kヽ>､ﾊ    _,.ﾍ､    /､!"
-echo -e "             !'〈//｀Ｔ´', ＼ ｀'7'ｰr'"
-echo -e "             ﾚ'ヽL__|___i,___,ンﾚ|ノ"
-echo -e "                  ﾄ-,/  |___./"
-echo -e "                  'ｰ'    !_,.:"
-echo -e "本项目完全免费，若你是收费买的，恭喜您，您被骗了！"
-echo -e "项目地址：https://github.com/Elegycloud/clash-for-linux-backup"
-echo -e "项目随时会寄，且行且珍惜！"
-echo -e "请执行以下命令加载环境变量: source /etc/profile.d/clash.sh\n"
-echo -e "请执行以下命令开启系统代理: proxy_on\n"
+
+echo -e "请执行以下命令加载环境变量: source /etc/profile.d/clash.sh"
+echo -e "请执行以下命令开启系统代理: proxy_on"
 echo -e "若要临时关闭系统代理，请执行: proxy_off\n"
